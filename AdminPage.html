@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="AdminPage.css">
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+</head>
+<body>
+<ul id="NavBar">
+    <li><a href="HomePage.html">Home</a></li>
+    <li><a href="LoginPage.html">Login</a></li>
+    <li><a href="Credits.html">Credit</a></li>
+    <li><a href="AdminPage.html">Admin Page</a></li>
+</ul>
+<div id="AdminForm">
+    <?php
+try {
+    require_once("functions.php");
+    $dbConn = getConnection();
+
+    $sqlQuery = "SELECT movieID, title, categoryName, directorName
+		FROM nc_movie
+		INNER JOIN nc_category
+		ON nc_category.categoryID = nc_movie.categoryID
+		INNER JOIN nc_director
+		ON nc_director.directorID = nc_movie.directorID
+		ORDER BY title";
+
+    $queryResult = $dbConn->query($sqlQuery);
+
+    while ($rowObj = $queryResult->fetchObject()) {
+
+    $movieID = $rowObj->movieID;
+    echo "<div class='movie'>\n
+    <a href='editMovieForm.php?movieID=$movieID'><span class='title'>{$rowObj->title}</span>\n</a>
+    <span class='categoryName'>{$rowObj->categoryName}</span>\n
+    <span class='directorName'>{$rowObj->directorName}</span>\n
+</div>\n";
+    }
+    }
+    catch (Exception $e){
+    echo "<p>Query failed: ".$e->getMessage()."</p>\n";
+    }
+    ?>
+</body>
+</html>
+</div>
+
+</body>
+</html>
